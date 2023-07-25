@@ -1,5 +1,7 @@
+// Itai Alcalai 206071110
 package com.genoox.homeAss.model;
 
+// Defines a public class that holds all information for a single variant
 public class Variant {
     private String chromosome;
     private int position;
@@ -12,6 +14,7 @@ public class Variant {
     private String format;
     private String gene;  // to store gene from fetch_variant_details API
 
+    // constructor recieves a list of the variants data
     public Variant(String[] data) {
         this.chromosome = data[0];
         this.position = Integer.parseInt(data[1]);
@@ -65,10 +68,12 @@ public class Variant {
         return gene;
     }
 
+    // set the gene and update the INFO line
     public void setGene(String gene) {
         this.gene = gene;
         this.info += ";GENE=" + gene;
     }
+    // concat all components to the vcf file format
     @Override
     public String toString() {
         return chromosome + "\t" + position + "\t" + id + "\t" + ref + "\t" + alt + "\t" + qual + "\t" + filter + "\t" + info + "\t" + format;

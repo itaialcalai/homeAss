@@ -1,43 +1,66 @@
+// Main package
 package com.genoox.homeAss;
 
+// Import necessary classes
 import com.genoox.homeAss.io.VcfFileReader;
 import com.genoox.homeAss.processor.VcfProcessor;
-import java.util.List;
-import java.io.IOException;
 
 public class Main {
+
+    // Main method
     public static void main(String[] args) {
-        if (args.length != 1) {
-            System.out.println("Please provide the limit as an argument");
+
+        // Check if limit is provided and is an integer less than 10
+        if (args.length < 1 || !isNumeric(args[0]) || Integer.parseInt(args[0]) >= 10) {
+            System.out.println("Please provide the limit (an integer less than 10) as the first argument");
             System.exit(1);
         }
 
+        // Parse the limit from the provided argument
         int limit = Integer.parseInt(args[0]);
 
+        // Parse optional parameters, providing default values if they are not specified
+        int start = args.length > 1 && isNumeric(args[1]) ? Integer.parseInt(args[1]) : 0;
+        int end = args.length > 2 && isNumeric(args[2]) ? Integer.parseInt(args[2]) : Integer.MAX_VALUE;
+        int minDP = args.length > 3 && isNumeric(args[3]) ? Integer.parseInt(args[3]) : 0;
+
+        // Check if end is greater than start
+        if( end < start) {
+            System.out.println("End position must be greater than or equal to start position");
+            System.exit(1);
+        }
+
+        // Define bucket and object keys for the file to be read
         String bucketName = "resources.genoox.com";
         String objectKey = "C:\\Users\\itaia\\OneDrive\\Genoox asignment\\ASW_50_samples.vcf.decomp.vcf.gz";
         String objectKey1 = "homeAssingment/demo_vcf_multisample.vcf.gz";
 
-
-        // Fill in with your actual start, end and minDP
-        int start = 15000;
-        int end = 80000;
-        int minDP = 10;
-
+        // Initialize a VCF file reader and a VCF processor
         VcfFileReader reader;
         boolean stat;
         try {
+            // Create a new reader for the VCF file
             reader = new VcfFileReader(bucketName, objectKey);
+
+            // Create a new processor for the VCF data
             VcfProcessor processor = new VcfProcessor(start, end, minDP, limit);
+
+            // Process the VCF file
             stat = processor.processVcf(reader);
+
+            // Check the status of the VCF processing
             if (stat) {
                 System.out.println("FINISH!!!!");
             }
         } catch (Exception e) {
+            // Handle any exceptions that occurred during VCF processing
             System.err.println("Error processing the VCF file: " + e.getMessage());
             return;
         }
     }
+
+    // Helper method to check if a string is numeric
+    private static boolean isNumeric(String str) {
+        return str.matches("-?\\d+(\\.\\d+)?");
+    }
 }
-
-
