@@ -20,7 +20,7 @@ public class Main {
 
 
         // Fill in with your actual start, end and minDP
-        int start = 10000;
+        int start = 15000;
         int end = 80000;
         int minDP = 10;
 

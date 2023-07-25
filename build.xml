@@ -1,11 +1,17 @@
 <project name="GenooxAss" default="build" basedir=".">
 
     <property name="src.dir" value="src/main/java"/>
+    <property name="lib.dir" value="lib"/>
     <property name="build.dir" value="build"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
     <property name="jar.dir" value="${build.dir}/jar"/>
     <property name="main.class" value="com.genoox.homeAss.Main"/>
     <property name="args" value=""/>
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+        <pathelement path="${classes.dir}"/>
+    </path>
 
     <target name="clean">
         <delete dir="${build.dir}"/>
@@ -13,7 +19,7 @@
 
     <target name="compile">
         <mkdir dir="${classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false">
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false" classpathref="classpath">
             <src path="${src.dir}"/>
             <include name="**/*.java"/>
         </javac>
@@ -25,12 +31,16 @@
             <manifest>
                 <attribute name="Main-Class" value="${main.class}"/>
             </manifest>
+            <zipgroupfileset dir="${lib.dir}" includes="**/*.jar"/>
         </jar>
     </target>
 
     <target name="run" depends="jar">
         <java jar="${jar.dir}/${ant.project.name}.jar" fork="true">
             <arg line="${args}"/>
+            <classpath>
+                <path refid="classpath"/>
+            </classpath>
         </java>
     </target>
 

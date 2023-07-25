@@ -1,4 +1,5 @@
 package com.genoox.homeAss.processor;
+import com.genoox.homeAss.util.*;
 import com.genoox.homeAss.model.*;
 import com.genoox.homeAss.io.*;
 import java.io.IOException;
@@ -77,6 +78,12 @@ public class VcfProcessor {
                     Variant variant = new Variant(attr);
 
                     // add gene
+                    try {
+                        String gene = ApiUtils.fetchGeneFromVariant(variant);
+                        variant.setGene(gene);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                     for (int i = 0; i < samplesInfo.length; i++) {
                         if (!samples.get(i).getStatus()) {

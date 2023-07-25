@@ -1,6 +1,7 @@
 package com.genoox.homeAss.model;
 import java.util.List;
 import java.util.ArrayList;
+import com.genoox.homeAss.io.VcfWriter;
 
 public class Sample {
     private boolean finished;
@@ -9,6 +10,7 @@ public class Sample {
     private String name;
     private List<String> variants;
     private int limit;
+    private VcfWriter writer;
 
     public Sample(String name, List<String> metadata, String header, int limit) {
         this.name = name;
@@ -17,6 +19,7 @@ public class Sample {
         this.variants = new ArrayList<>();
         this.limit = limit;
         this.finished = false;
+        this.writer = new VcfWriter();
     }
 
     public void addVariant(Variant variant, String info) {
@@ -31,6 +34,11 @@ public class Sample {
     }
 
     public void outputSample() {
+        String filePath = "outputs/" + this.name + "_filtered.vcf";
+        writer.writeSample(this, filePath);
+    }
+
+    public void printSample() {
         System.out.println(this.name);
 
         for(String metadataLine: this.metadata) {
@@ -44,6 +52,23 @@ public class Sample {
         }
 
         System.out.println("XXXXXXXXX\n");
+    }
+
+    // Getter methods
+    public String getName() {
+        return this.name;
+    }
+
+    public String getHeader() {
+        return this.header;
+    }
+
+    public List<String> getMetadata() {
+        return this.metadata;
+    }
+
+    public List<String> getVariants() {
+        return this.variants;
     }
 
     public boolean getStatus(){
