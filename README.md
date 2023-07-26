@@ -57,7 +57,7 @@ The main functionalities of this project include:
 1. Reading the content of a gzipped vcf file from AWS S3.
 2. For each sample in the VCF, outputting into a new VCF file named `<SAMPLE>_filtered.vcf`.
 3. The new VCF file includes the VCF header, VCF column line with the relevant sample's column, and all the variant lines present in that sample that meet the filter criteria.
-   It is assumed that if a sample is homozygous for the reference allele (0/0) or is not present ('.'), it is considered not to be present in that sample, but this could be changed easily to include (0/0).
+   It is assumed that a variant is considered not to be present in that sample if genotype is ('.'). This could be changed easily to include a filter for (0/0) - homozygous to the reference allel.
 5. An API is used to get the variant gene which is included as a new subfield in the INFO column of the output variant line.
 6. The output for each sample stops when reaching the end of the original VCF file, or after outputting for that sample, the number of lines specified in the limit parameter.
 7. The output VCF files will be generated to the 'output' direcory located within the project directory.
