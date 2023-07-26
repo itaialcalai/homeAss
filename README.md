@@ -71,5 +71,5 @@ The project implements all the required functionality in an object-oriented mann
 All Rights Reserved.
 
 ## Contact
-Itai alcalai - itai.alcalai@gmail.com
+Itai Alcalai - itai.alcalai@gmail.com
 
