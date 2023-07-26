@@ -1,3 +1,4 @@
+// Itai Alcalai 206071110
 package com.genoox.homeAss.io;
 
 //import software.amazon.awssdk.services.s3.S3Client;
@@ -8,6 +9,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.NoSuchElementException;
 import java.util.Iterator;
 
+// **this is a local Reader for debugg
 public class VcfFileReader implements Iterator<String>, Closeable {
 //    private S3Client s3;
     private String bucketName;

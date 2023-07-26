@@ -21,17 +21,19 @@ public class VcfProcessor {
     private int end;
     private int minDP;
     private int limit;
+    private int deNovo;
 
     private List<String> metadata = new ArrayList<>(); // uniform metadata
     private String header; // uniform header
     private List<Sample> samples = new ArrayList<>(); // all samples
 
     // constructor defiened by the user parameters
-    public VcfProcessor(int start, int end, int minDP, int limit) {
+    public VcfProcessor(int start, int end, int minDP, int limit, int deNovo) {
         this.start = start;
         this.end = end;
         this.minDP = minDP;
         this.limit = limit;
+        this.deNovo = deNovo;
     }
 
     // Method to parse the VCF file header and initialize Sample objects
@@ -92,6 +94,54 @@ public class VcfProcessor {
         return null;
     }
 
+    // Method to exract the Genotype and determine presence of variant by allel
+    public boolean variantNotInSample(String info) {
+        // Split the sample's information into fields
+        String[] fields = info.split(":");
+
+        // Extract the genotype from the first field
+        String genotype = fields[0];
+
+        // Check if the genotype is  0/0
+        return genotype.equals("0/0");
+    }
+
+    // Method that handles the deNovo feature logic
+    public void handleDeNovo(int probIndex, String probInfo, String[] samplesInfo, Variant variant) {
+        int motherIndex = -1;
+        int fatherIndex = -1;
+
+        // Find the indices of mother and father samples dynamically
+        for (int i = 0; i < samplesInfo.length; i++) {
+            String sampleName = samples.get(i).getName();
+            if (sampleName.equals("mother")) {
+                motherIndex = i;
+            } else if (sampleName.equals("father")) {
+                fatherIndex = i;
+            }
+        }
+        if (motherIndex == -1 || fatherIndex == -1) {
+            // Either mother or father sample is missing; cannot proceed with deNovo check
+            return;
+        }
+        // Get the genetic data of parents
+        String motherInfo = samplesInfo[motherIndex];
+        String fatherInfo = samplesInfo[fatherIndex];
+
+        if (deNovo == 1) {
+            // deNovo is set to false -> variant should apear in at least one of the parents
+            if (!variantNotInSample(motherInfo) || !variantNotInSample(fatherInfo)) {
+                samples.get(probIndex).addVariant(variant, probInfo);
+            }
+        } else {
+            // deNovo is set to true -> variant shouldn't apear in both parents
+            if (variantNotInSample(motherInfo) && variantNotInSample(fatherInfo)) {
+                samples.get(probIndex).addVariant(variant, probInfo);
+            }
+        }
+        return;
+    }
+
 
     // Method to process the VCF file
     public boolean processVcf(AWSFileReader reader) throws IOException {
@@ -139,21 +189,39 @@ public class VcfProcessor {
                         String gene = ApiUtils.fetchGeneFromVariant(variant);
                         variant.setGene(gene);
                     } catch (IOException e) {
+                        System.err.println("Failed to fetch gene");
                         e.printStackTrace();
                     }
 
                     // For each sample, if it's not finished, add the variant and its info
                     for (int i = 0; i < samplesInfo.length; i++) {
+                        // If the sample hasnwt reached the limit
                         if (!samples.get(i).getStatus()) {
                             String info = samplesInfo[i];
-                            if (!info.equals("...")) {
-                                samples.get(i).addVariant(variant, info);
+                            char first = info.charAt(0);
+                            // If the variant is present in the sample
+                            if (first != '.' && !variantNotInSample(info)) {
+                                // if deNovo option recieved and this is the proband sample
+                                if (deNovo != 2 && samples.get(i).getName().equals("proband")) {
+                                    handleDeNovo(i, info, samplesInfo, variant);
+                                } else {
+                                    samples.get(i).addVariant(variant, info);
+                                }
+
                             }
                         }
                     }
 
                 }
             }
+            // Output sample files that did not reach the limit
+            if (!reader.hasNext()) {
+                samples.stream().filter(sample -> !sample.getStatus())
+                        .forEach(sample -> {
+                            sample.outputSample();
+                        });
+            }
+
         } catch (Exception e) {
             // Handle the exception (you can log it or take appropriate actions).
             success = false;
@@ -161,6 +229,5 @@ public class VcfProcessor {
         }
         return success;
     }
-
 }
 
