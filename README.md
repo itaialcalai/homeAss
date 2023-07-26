@@ -65,7 +65,7 @@ The main functionalities of this project include:
 
 ## Personal Note
 
-The project implements all the required functionality in an object-oriented manner and is structured for future enhancements. The current version has basic error handling but going forward, we can improve the robustness of the error handling system. Additionally, the functionality of the deNovo feature can also be enhanced and thorough testing for various user scenarios can be conducted.
+The project implements all the required functionality in an object-oriented manner and is structured for future enhancements. The current version has basic error handling but going forward, we can improve the robustness of the error handling system. Additionally, the functionality of the deNovo feature can also be enhanced and thorough testing for various user scenarios can be conducted. Program flow and time can also be further improved, handeling io with threads for example.
 
 ## License
 All Rights Reserved.
