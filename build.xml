@@ -37,13 +37,13 @@
 
     <target name="run" depends="jar">
         <java jar="${jar.dir}/${ant.project.name}.jar" fork="true">
-            <arg line="${args}"/>
+            <arg value="${args}"/>
             <classpath>
                 <path refid="classpath"/>
             </classpath>
         </java>
     </target>
 
-    <target name="build" depends="clean,run"/>
+    <target name="build" depends="clean,jar"/>
 
 </project>

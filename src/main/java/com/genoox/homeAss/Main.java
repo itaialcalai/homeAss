@@ -2,13 +2,14 @@
 package com.genoox.homeAss;
 
 // Import necessary classes
-import com.genoox.homeAss.io.VcfFileReader;
+import com.genoox.homeAss.io.AWSFileReader;
 import com.genoox.homeAss.processor.VcfProcessor;
 
 public class Main {
 
     // Main method
     public static void main(String[] args) {
+        System.out.println("Hello");
 
         // Check if limit is provided and is an integer less than 10
         if (args.length < 1 || !isNumeric(args[0]) || Integer.parseInt(args[0]) >= 10) {
@@ -32,31 +33,32 @@ public class Main {
 
         // Define bucket and object keys for the file to be read
         String bucketName = "resources.genoox.com";
-        String objectKey = "C:\\Users\\itaia\\OneDrive\\Genoox asignment\\ASW_50_samples.vcf.decomp.vcf.gz";
-        String objectKey1 = "homeAssingment/demo_vcf_multisample.vcf.gz";
+//        String objectKey1 = "C:\\Users\\itaia\\OneDrive\\Genoox asignment\\ASW_50_samples.vcf.decomp.vcf.gz";
+        String objectKey = "homeAssingment/demo_vcf_multisample.vcf.gz";
 
         // Initialize a VCF file reader and a VCF processor
-        VcfFileReader reader;
         boolean stat;
         try {
             // Create a new reader for the VCF file
-            reader = new VcfFileReader(bucketName, objectKey);
+            try (AWSFileReader reader = new AWSFileReader(bucketName, objectKey)) {
+                // Create a new processor for the VCF data
+                VcfProcessor processor = new VcfProcessor(start, end, minDP, limit);
 
-            // Create a new processor for the VCF data
-            VcfProcessor processor = new VcfProcessor(start, end, minDP, limit);
+                // Process the VCF file
+                stat = processor.processVcf(reader);
 
-            // Process the VCF file
-            stat = processor.processVcf(reader);
-
-            // Check the status of the VCF processing
-            if (stat) {
-                System.out.println("FINISH!!!!");
+                // Check the status of the VCF processing
+                if (stat) {
+                    System.out.println("FINISH!!!!");
+                    System.exit(0);
+                }
             }
         } catch (Exception e) {
             // Handle any exceptions that occurred during VCF processing
             System.err.println("Error processing the VCF file: " + e.getMessage());
-            return;
+            System.exit(1);  // abnormal termination
         }
+        System.exit(0);
     }
 
     // Helper method to check if a string is numeric

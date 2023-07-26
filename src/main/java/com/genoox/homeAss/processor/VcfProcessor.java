@@ -53,7 +53,7 @@ public class VcfProcessor {
     }
 
     // Method to parse the metadata lines in the VCF file
-    public String parseMeta(VcfFileReader reader) throws IOException {
+    public String parseMeta(AWSFileReader reader) throws IOException {
         String line = "0";
 
         // Continue reading lines until a line that doesn't start with ## is encountered
@@ -94,7 +94,7 @@ public class VcfProcessor {
 
 
     // Method to process the VCF file
-    public boolean processVcf(VcfFileReader reader) throws IOException {
+    public boolean processVcf(AWSFileReader reader) throws IOException {
         boolean success = true;
         try {
             // Parse the metadata lines in the VCF file
