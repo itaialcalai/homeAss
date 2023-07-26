@@ -16,7 +16,7 @@ Ensure that you have the following installed on your system:
 
 ### How to run
 
-After cloning, you can compile the project with the following command:
+After cloning and cd homeAss, you can compile the project with the following command:
 
 ```shell
 mvn compile
