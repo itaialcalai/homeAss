@@ -1,0 +1,10 @@
+com/genoox/homeAss/model/Sample.class
+com/genoox/homeAss/processor/VcfProcessor.class
+com/genoox/homeAss/util/ApiUtils.class
+com/genoox/homeAss/io/VcfWriter.class
+com/genoox/homeAss/util/Cache.class
+org/example/App.class
+com/genoox/homeAss/io/VcfFileReader.class
+com/genoox/homeAss/io/AWSFileReader.class
+com/genoox/homeAss/Main.class
+com/genoox/homeAss/model/Variant.class
