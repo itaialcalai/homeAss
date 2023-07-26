@@ -41,6 +41,13 @@ For example, to run the project with a limit of 5 and a minDP of 10, you would u
 ```shell
 mvn exec:java -Dexec.args="5 . . 10"
 ```
+
+## Program Behavior
+
+Upon initiation, the program outputs a greeting message, "Hello". As it begins processing the VCF file, a status message "processing VCF..." is displayed. Upon successful completion of the process, the program indicates completion with the message "Done."
+
+Errors are handled gracefully throughout the program's operation. Any non-terminal errors encountered during execution will prompt appropriate error messages but will not interrupt the overall operation of the program.
+
 Note: deNovo option currently limited to one set of: proband, mother, father; within the samples in the file.
 
 ## Project Functionality
