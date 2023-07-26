@@ -41,6 +41,7 @@ For example, to run the project with a limit of 5 and a minDP of 10, you would u
 ```shell
 mvn exec:java -Dexec.args="5 . . 10"
 ```
+Note: deNovo option currently limited to one set of: proband, mother, father; within the samples in the file.
 
 ## Project Functionality
 
@@ -49,13 +50,19 @@ The main functionalities of this project include:
 1. Reading the content of a gzipped vcf file from AWS S3.
 2. For each sample in the VCF, outputting into a new VCF file named `<SAMPLE>_filtered.vcf`.
 3. The new VCF file includes the VCF header, VCF column line with the relevant sample's column, and all the variant lines present in that sample that meet the filter criteria.
-   It is assumed that if a sample is homozygous for the reference allele (0/0), it is considered not to be present in that sample.
+   It is assumed that if a sample is homozygous for the reference allele (0/0) or is not present ('.'), it is considered not to be present in that sample, but this could be changed easily to include (0/0).
 5. An API is used to get the variant gene which is included as a new subfield in the INFO column of the output variant line.
 6. The output for each sample stops when reaching the end of the original VCF file, or after outputting for that sample, the number of lines specified in the limit parameter.
 7. The output VCF files will be generated to the 'output' direcory located within the project directory.
-
+8. 
 
 ## Personal Note
 
-The project successfully implements all the required functionality in an object-oriented manner and is structured for future enhancements.
-Going forward, we can make the processor more robust to handle certain VCF files and also conduct thorough testing for various user scenarios.
+The project implements all the required functionality in an object-oriented manner and is structured for future enhancements. The current version has basic error handling but going forward, we can improve the robustness of the error handling system. Additionally, the functionality of the deNovo feature can also be enhanced and thorough testing for various user scenarios can be conducted.
+
+## License
+All Rights Reserved.
+
+## Contact
+Itai alcalai - itai.alcalai@gmail.com
+
