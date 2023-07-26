@@ -34,7 +34,7 @@ The project can be run with the following command:
 mvn exec:java -Dexec.args="limit [start] [end] [minDP] [deNovo]"
 ```
 
-The first argument is mandatory limit < 10, while the others are optional. 
+The first argument is mandatory limit < 10, while the others are optional. deNovo option accepts 'true'/'false' argument.
 
 For example, to run the project with a limit of 5 and a minDP of 10, you would use the following command:
 
