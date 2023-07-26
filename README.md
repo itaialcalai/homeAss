@@ -61,7 +61,7 @@ The main functionalities of this project include:
 5. An API is used to get the variant gene which is included as a new subfield in the INFO column of the output variant line.
 6. The output for each sample stops when reaching the end of the original VCF file, or after outputting for that sample, the number of lines specified in the limit parameter.
 7. The output VCF files will be generated to the 'output' direcory located within the project directory.
-8. 
+   
 
 ## Personal Note
 
